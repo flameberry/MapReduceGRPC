@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package mapreduce;
+
+service MapReduceService {
+  rpc SubmitJob (JobRequest) returns (JobResponse);
+  rpc ProcessMap (MapTask) returns (MapResult);
+  rpc ProcessReduce (ReduceTask) returns (ReduceResult);
+}
+
+message JobRequest {
+  string job_id = 1;
+  repeated string input_data = 2;
+  string map_function = 3;   // Client-defined map function code
+  string reduce_function = 4; // Client-defined reduce function code
+}
+
+message JobResponse {
+  string job_id = 1;
+  string status = 2;
+}
+
+message MapTask {
+  string job_id = 1;
+  string data_chunk = 2;
+  string map_function = 3; 
+}
+
+message MapResult {
+  string job_id = 1;
+  repeated string intermediate_data = 2;
+}
+
+message ReduceTask {
+  string job_id = 1;
+  repeated string intermediate_data = 2;
+  string reduce_function = 3;
+}
+
+message ReduceResult {
+  string job_id = 1;
+  string output = 2;
+}
